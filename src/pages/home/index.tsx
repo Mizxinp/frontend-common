@@ -1,10 +1,11 @@
-import React from 'react'
+import React from 'react';
+import { useHistory } from 'react-router-dom';
+
 
 function Home() {
+  const history = useHistory()
   return (
-    <div>
-      首页
-    </div>
+    <div onClick={() => history.push('/other')}>首页</div>
   )
 }
 
