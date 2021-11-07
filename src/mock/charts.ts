@@ -56,3 +56,18 @@ export const mockBarData = [
   { name: 'Sat', value: 110 },
   { name: 'Sun', value: 130 },
 ]
+
+export const chinaMapData = [
+  { name: '上海', value: 5 },
+  { name: '重庆', value: 6 },
+  { name: '河北', value: 76 },
+  { name: '河南', value: 96 },
+  { name: '云南', value: 9 },
+  { name: '辽宁', value: 50 },
+  { name: '黑龙江', value: 24 },
+  { name: '湖南', value: 27 },
+  { name: '安徽', value: 60 },
+  { name: '山东', value: 5 },
+  { name: '新疆', value: 48 },
+  { name: '江苏', value: 21 },
+]
