@@ -6,6 +6,7 @@ import PageContainer from '../components/PageContainer';
 
 const HomePage = lazy(() => import('../pages/home'));
 const OtherPage = lazy(() => import('../pages/other'));
+const TestPage = lazy(() => import('../pages/test'));
 
 const AppRouter = () => {
   return (
@@ -15,6 +16,7 @@ const AppRouter = () => {
           <Switch>
             <Route exact key={RoutePath.home} path={RoutePath.home} component={HomePage} />
             <Route exact key={RoutePath.other} path={RoutePath.other} component={OtherPage} />
+            <Route exact key={RoutePath.test} path={RoutePath.test} component={TestPage} />
             <Redirect from="/" to={RoutePath.home} />
           </Switch>
         </Suspense>

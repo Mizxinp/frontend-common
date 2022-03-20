@@ -14,6 +14,7 @@ function PageContainer(props: { children: React.ReactChild }) {
           <Menu theme="dark" mode="horizontal">
             <Menu.Item onClick={() => history.push('/')}>图表</Menu.Item>
             <Menu.Item onClick={() => history.push('/other')}>其他</Menu.Item>
+            <Menu.Item onClick={() => history.push('/test')}>测试demo</Menu.Item>
           </Menu>
         </Header>
       </Layout>
