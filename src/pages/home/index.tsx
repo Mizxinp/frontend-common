@@ -3,7 +3,6 @@ import PieChart from '@/components/charts/PieChart';
 import LineChart from '@/components/charts/LineChart';
 import BarChart from '@/components/charts/BarChart';
 import ChinaMap from '@/components/charts/ChinaMap';
-import { Button } from 'sparrow-ui';
 
 import styles from './index.module.scss';
 
@@ -13,7 +12,6 @@ import { mockPieData, mockLineData, mockBarData, chinaMapData } from '@/mock/cha
 function Home() {
   return (
     <div className={styles.page}>
-      <Button btnType="danger">jjjjjjjj</Button>
       <Panel title="饼图">
         <div className={styles.content}>
           <PieChart pieData={mockPieData} className={styles.card} />

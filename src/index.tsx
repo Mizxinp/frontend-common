@@ -1,7 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import 'antd/dist/antd.css'
-import 'sparrow-ui/dist/style.css'
 import reportWebVitals from './reportWebVitals';
 import Router from './router/route';
 
