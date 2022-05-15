@@ -25,14 +25,13 @@ const SlidingUnlock: FC<IProps> = (props) => {
     className,
     buttonClassName,
     customConfig,
-    initPlaceholder,
-    successPlaceholder,
+    initPlaceholder = '请按住滑块，拖动到最右边',
+    successPlaceholder = '验证通过',
     successColor = '#0cc5ae',
   } = props;
   const containerRef = useRef<any>();
   const bgRef = useRef<any>();
   const btnRef = useRef<any>();
-  const isMouseDown = useRef<boolean>(false);
   const mouseDownX = useRef<number>(0);
 
   const [status, setStatus] = useState(SlidingStatus.Initial);
@@ -43,7 +42,6 @@ const SlidingUnlock: FC<IProps> = (props) => {
       mouseDownX.current = event.clientX || event?.touches[0]?.clientX;
       bgRef.current.style.transition = '';
       btnRef.current.style.transition = '';
-      isMouseDown.current = true;
 
       listenEvent();
     },
@@ -52,7 +50,6 @@ const SlidingUnlock: FC<IProps> = (props) => {
 
   const handleMove = useCallback(
     (e: any) => {
-      if (!isMouseDown.current) return;
       try {
         const moveX = e.clientX;
         const distance = containerRef.current.offsetWidth - btnRef.current.offsetWidth;
@@ -70,7 +67,6 @@ const SlidingUnlock: FC<IProps> = (props) => {
         if (offsetX === distance) {
           setStatus(SlidingStatus.Success);
           bgRef.current.style.backgroundColor = successColor;
-          isMouseDown.current = false;
           onSuccess?.();
           clearEvent();
         }
@@ -83,8 +79,7 @@ const SlidingUnlock: FC<IProps> = (props) => {
   );
 
   const handleMouseUp = useCallback(() => {
-    if (status === SlidingStatus.Success || !isMouseDown.current) return;
-    isMouseDown.current = false;
+    if (status === SlidingStatus.Success) return;
     btnRef.current.style.left = 0;
     bgRef.current.style.width = 0;
     btnRef.current.style.transition = 'left 1s ease';
@@ -125,11 +120,11 @@ const SlidingUnlock: FC<IProps> = (props) => {
   const config = useMemo(() => {
     return {
       [SlidingStatus.Initial]: {
-        placeholderText: initPlaceholder || '请按住滑块，拖动到最右边',
+        placeholderText: initPlaceholder,
         icon: <img src={rightIcon} />,
       },
       [SlidingStatus.Success]: {
-        placeholderText: successPlaceholder || '验证通过',
+        placeholderText: successPlaceholder,
         icon: (
           <svg
             width="16"
@@ -146,8 +141,6 @@ const SlidingUnlock: FC<IProps> = (props) => {
               fill={`${successColor || '#0cc5ae'}`}
             />
             <path
-              fill-rule="evenodd"
-              clip-rule="evenodd"
               d="M7.07125 11.0001L4.31438 8.24326C4.14081 8.06969 3.85941 8.06969 3.68584 8.24326C3.51227 8.41682 3.51227 8.69823 3.68584 8.8718L6.79695 11.9829C6.98536 12.1713 7.29607 12.1527 7.4607 11.9432L12.3496 5.721C12.5012 5.52799 12.4677 5.24859 12.2747 5.09694C12.0817 4.94529 11.8023 4.97882 11.6506 5.17183L7.07125 11.0001Z"
               fill="white"
             />
