@@ -29,30 +29,44 @@ const SlidingUnlock: FC<IProps> = (props) => {
     successPlaceholder = '验证通过',
     successColor = '#0cc5ae',
   } = props;
-  const containerRef = useRef<any>();
-  const bgRef = useRef<any>();
-  const btnRef = useRef<any>();
+  const containerRef = useRef<HTMLDivElement>(null);
+  const bgRef = useRef<HTMLDivElement>(null);
+  const btnRef = useRef<HTMLDivElement>(null);
   const mouseDownX = useRef<number>(0);
 
   const [status, setStatus] = useState(SlidingStatus.Initial);
 
-  const handleStartSlide = useCallback(
-    (event: any) => {
+  const startSlide = useCallback(
+    (clientX: number) => {
       if (status === SlidingStatus.Success) return;
-      mouseDownX.current = event.clientX || event?.touches[0]?.clientX;
-      bgRef.current.style.transition = '';
-      btnRef.current.style.transition = '';
+      mouseDownX.current = clientX;
+      bgRef.current!.style.transition = '';
+      btnRef.current!.style.transition = '';
 
       listenEvent();
     },
     [status],
   );
 
+  const handleMouseDown: React.MouseEventHandler<HTMLDivElement> = useCallback(
+    (e) => {
+      startSlide(e.clientX);
+    },
+    [startSlide],
+  );
+
+  const handleTouchStart: React.TouchEventHandler<HTMLDivElement> = useCallback(
+    (e) => {
+      startSlide(e?.touches[0]?.clientX);
+    },
+    [startSlide],
+  );
+
   const handleMove = useCallback(
-    (e: any) => {
+    (clientX: number) => {
       try {
-        const moveX = e.clientX;
-        const distance = containerRef.current.offsetWidth - btnRef.current.offsetWidth;
+        const moveX = clientX;
+        const distance = containerRef.current!.offsetWidth - btnRef.current!.offsetWidth;
         let offsetX = moveX - mouseDownX.current;
 
         if (offsetX > distance) {
@@ -61,12 +75,12 @@ const SlidingUnlock: FC<IProps> = (props) => {
           offsetX = 0;
         }
 
-        btnRef.current.style.left = `${offsetX}px`;
-        bgRef.current.style.width = `${offsetX}px`;
+        btnRef.current!.style.left = `${offsetX}px`;
+        bgRef.current!.style.width = `${offsetX}px`;
 
         if (offsetX === distance) {
           setStatus(SlidingStatus.Success);
-          bgRef.current.style.backgroundColor = successColor;
+          bgRef.current!.style.backgroundColor = successColor;
           onSuccess?.();
           clearEvent();
         }
@@ -80,25 +94,25 @@ const SlidingUnlock: FC<IProps> = (props) => {
 
   const handleMouseUp = useCallback(() => {
     if (status === SlidingStatus.Success) return;
-    btnRef.current.style.left = 0;
-    bgRef.current.style.width = 0;
-    btnRef.current.style.transition = 'left 1s ease';
-    bgRef.current.style.transition = 'width 1s ease';
+    btnRef.current!.style.left = '0px';
+    bgRef.current!.style.width = '0px';
+    btnRef.current!.style.transition = 'left 1s ease';
+    bgRef.current!.style.transition = 'width 1s ease';
     onFail?.();
     clearEvent();
   }, [status, onFail]);
 
   const handleTouchmove = useCallback(
-    (e: any) => {
-      handleMove(e?.touches[0]);
+    (e: TouchEvent) => {
+      handleMove(e?.touches[0]?.clientX);
     },
     [handleMove],
   );
 
   const handleMouseMove = useCallback(
-    (e: any) => {
+    (e: MouseEvent) => {
       e.preventDefault();
-      handleMove(e);
+      handleMove(e?.clientX);
     },
     [handleMove],
   );
@@ -162,8 +176,8 @@ const SlidingUnlock: FC<IProps> = (props) => {
       <div
         className={`${styles.btn} ${buttonClassName}`}
         ref={btnRef}
-        onMouseDown={handleStartSlide}
-        onTouchStart={handleStartSlide}
+        onMouseDown={handleMouseDown}
+        onTouchStart={handleTouchStart}
       >
         {icon}
       </div>
